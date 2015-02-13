@@ -27,7 +27,29 @@ function addProjectDetails(e) {
 	var idNumber = projectID.substr('project'.length);
 
 	console.log("User clicked on project " + idNumber);
+
+
+	console.log("/project/" + idNumber);
+	
+	$('#project'+idNumber).click(function(e) {
+		$.get("/project/" + idNumber, project_data);
+	});
 }
+
+function project_data(result) {
+	console.log(result);
+	var correct_id = result.id;
+	console.log(correct_id);
+
+	var image_url = result.image;
+	var summary = result.summary;
+	var date = result.date;
+
+	var html = '<p>' + image_url + ' </p>'+'<h4>' + date + '</h4>' + '<p>' + summary +'</p>';
+
+	$('#project'+correct_id).find('.details').html(html);
+
+} 
 
 /*
  * Make an AJAX call to retrieve a color palette for the site
@@ -35,4 +57,22 @@ function addProjectDetails(e) {
  */
 function randomizeColors(e) {
 	console.log("User clicked on color button");
+
+//	$('#colorBtn').click(function(e) {
+		console.log ("inhere");
+	$.get("/palette", changeColor);
+//	});
+}
+
+function changeColor(result) {
+	console.log(result);
+
+	var colorArray = result['colors'];
+	var colors = colorArray['hex'];
+
+	$('body').css('background-color', colors[0]);
+	$('.thumbnail').css('background-color', colors[1]);
+	$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+	$('p').css('color', colors[3]);
+	$('.project img').css('opacity', .75);
 }
